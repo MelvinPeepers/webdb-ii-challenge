@@ -1,12 +1,12 @@
 const express = require("express");
 
-const CarsRouter = require("./cars/car-router.js");
+const carsRouter = require("../cars/car-router.js");
 
 const server = express();
 
 server.use(express.json());
 
-server.use("/api/cars", CarsRouter);
+server.use("/api/cars", carsRouter);
 
 server.get("/", (req, res) => {
   res.send("<h3>WebDB-ii-challenge</h3>");
