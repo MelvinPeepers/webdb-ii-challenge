@@ -81,9 +81,9 @@ const router = express.Router();
   
   router.post("/", (req, res) => {
     // INSERT INTO Posts (all of the keys from req.body) VALUES (all of the values from req.body)
-    const accountData = req.body;
+    const carData = req.body;
     db("cars")
-      .insert(cartData)
+      .insert(carData)
       .then(ids => {
         res.status(201).json({ newCar: ids[0] });
       })
