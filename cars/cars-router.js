@@ -4,50 +4,8 @@ const db = require("../data/dbConfig.js")
 
 const router = express.Router();
 
-// router.get("/", (req, res) => {
-//     db("cars")
-//       .then(cars => {
-//         res.json(cars);
-//       })
-//       .catch(error => {
-//         res.status(500).json({ message: "Failed to retrieve cars" });
-//       });
-//   });
-  
-//   router.get("/:id", (req, res) => {
-//     const { id } = req.params;
-  
-//     db("cars")
-//       .where({ id })
-//       .first()
-//       .then(car => {
-//         res.json(car);
-//       })
-//       .catch(error => {
-//         res.status(500).json({ message: "Failed to retrieve car" });
-//       });
-//   });
-  
-//   router.post("/", (req, res) => {
-//     const fruitData = req.body;
-//     db("cars")
-//       .insert(carData)
-//       .then(ids => {
-//         db("cars")
-//           .where({ id: ids[0] })
-//           .then(newCarEntry => {
-//             res.status(201).json(newCarEntry);
-//           });
-//       })
-//       .catch(error => {
-//         console.log("POST error", error);
-//         res.status(500).json({ message: "Failed to store data" });
-//       });
-//   });
-
-
   router.get("/", (req, res) => {
-    // SELECT * FROM Posts
+    // SELECT * FROM Cars
     //   db("accounts")
     db.select("*")
       .from("cars")
@@ -58,9 +16,11 @@ const router = express.Router();
         res.status(500).json({ message: "Failed to get cars" });
       });
   });
+  // http://localhost:5000/api/cars
+  // tested with Postman
   
   router.get("/:id", (req, res) => {
-    // SELECT * FROM Posts WHERE ID = param.id
+    // SELECT * FROM carss WHERE ID = req.param.id
     const { id } = req.params;
     
     db("cars")
@@ -78,9 +38,11 @@ const router = express.Router();
         res.status(500).json({ message: "Failed to get car" });
       });
   });
+  // http://localhost:5000/api/cars/3
+  // tested with Postman
   
   router.post("/", (req, res) => {
-    // INSERT INTO Posts (all of the keys from req.body) VALUES (all of the values from req.body)
+    // INSERT INTO cars (all of the keys from req.body) VALUES (all of the values from req.body)
     const carData = req.body;
     db("cars")
       .insert(carData)
@@ -92,28 +54,31 @@ const router = express.Router();
         res.status(500).json({ message: "Failed to insert car" });
       });
   });
+    // http://localhost:5000/api/cars
+  // tested with Postman
   
-  router.put("/:id", (req, res) => {
+  router.put('/:id', (req, res) => {
     const { id } = req.params;
     const changes = req.body;
-    // UPDATE  Posts SET changes.key = changes.value, changes.key = WHERE 9d = id;
-    db("cars")
-      .where({ id })
-      .update(changes)
-      .then(count => {
-        if (count) {
-          res.status(200).json({ updated: count });
-        } else {
-          res.status(404).json({ message: "invalid car id" });
-        }
-      })
-      .catch(error => {
-        res.status(500).json({ message: "Failed to update car" });
-      });
+  
+    // UPDATE Cars SET changes.key = changes.value, changes.key = value WHERE id = id;
+    db('cars').where({ id }).update(changes)
+    .then(count => {
+      if (count) {
+        res.json({ updated: count });
+      } else {
+        res.status(404).json({ message: 'invalid car id' });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'Failed to update car'});
+    });
   });
+  // http://localhost:5000/api/cars/4
+  // tested with Postman
   
   router.delete("/:id", (req, res) => {
-    // DELETE FROM Posts WHERE id = id;
+    // DELETE FROM Cars WHERE id = id;
     const { id } = req.params;
   
     db("cars")
@@ -130,5 +95,6 @@ const router = express.Router();
         res.status(500).json({ message: "Failed to delete car" });
       });
   });
+    // tested with Postman
   
 module.exports = router;
